@@ -1,14 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package courseActivities;
 
-/**
- *
- * @author aliso
- */
-public class l01AbstractClasses {
-    
+// "Boat" class
+abstract class l01AbstractClasses {
+    String boatModel;
+    float boatMaxSpeed;
+    int boatExhausts;
+
+    public class powerBoat extends l01AbstractClasses {
+        float boatWeight;
+        boolean isBoatRefuelled;
+    }
+
+    public class speedBoat extends l01AbstractClasses {
+        int boatSeats;
+        float boatExtraFueltankCapacity;
+    }
 }

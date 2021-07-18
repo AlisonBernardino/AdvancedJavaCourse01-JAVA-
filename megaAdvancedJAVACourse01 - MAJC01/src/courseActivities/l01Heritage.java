@@ -82,6 +82,7 @@ public class l01Heritage {
             System.out.println("Desktop PC status = Turned ON!");
         }
     }
+    
     public static void main(String[] args){
         System.out.println("Personal device messages");
         
