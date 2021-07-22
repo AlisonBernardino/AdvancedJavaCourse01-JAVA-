@@ -25,7 +25,7 @@ public class Main {
             
             // To create the SQL instruction
             SQLInstruction = connection01.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-            databaseOutput = SQLInstruction.executeQuery("SELECT * FROM availableCars");
+            databaseOutput = SQLInstruction.executeQuery("SELECT * FROM availableVehicles");
         }catch(SQLException sqlError){
             System.out.println(sqlError.getMessage());
         }
