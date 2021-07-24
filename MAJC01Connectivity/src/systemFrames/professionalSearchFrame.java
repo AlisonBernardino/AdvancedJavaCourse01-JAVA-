@@ -72,7 +72,7 @@ public class professionalSearchFrame extends JPanel {
 
         setVisible(true);
     }
-
+    
     private void createEvents() {
         searchButton.addActionListener(new ActionListener() {
             @Override
@@ -92,5 +92,63 @@ public class professionalSearchFrame extends JPanel {
                SQLDeleteProfessionalName();
            }
         });
+        professionalNameList.addListSelectionListener(new ListSelectionListener(){
+            @Override
+            public void changedValue(ListSelectionEvent event01){
+                registeredProfessionalName = professionalNameList.getSelectedValue();
+                if(registeredProfessionalName == null){
+                    editButton.setEnabled(false);
+                    deleteButton.setEnabled(false);
+                }else{
+                    editButton.setEnabled(true);
+                    deleteButton.setEnabled(true);
+                }
+            }
+        });
+    }
+    
+    private void SQLProfessionalNameSearch(String professionalName){
+        
+        Connection searchConnection;
+        Statement SQLSearchInstruction;
+        ResultSet SQLSearchOutputData;
+        
+        try{
+            searchConnection = DriverManager.getConnection(databaseConfiguration.connectionCoordinates, databaseConfiguration.databaseUser, databaseConfiguration.databasePassword);
+            SQLSearchInstruction = searchConnection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            SQLSearchOutputData = SQLSearchInstruction.executeQuery("SELECT * FROM registeredProfessionals WHERE professionalFirstName like " + professionalName + "%'");
+            
+            professionalNameListModel.clear();
+            
+            while(SQLSearchOutputData.next()){
+                professionalName newProfessionalName = new professionalName();
+                newProfessionalName.setID(SQLSearchOutputData.getInt("professionalID"));
+                newProfessionalName.setProfessionalName(SQLSearchOutputData.getString("professionalName"));
+                
+                professionalNameListModel.addElement(professionalName);
+            }
+        }catch(SQLException SQLError){
+            JOptionPane.showMessageDialog(null, "Error D-01! There was a problem during names search. Please, review the inserted information");
+            Logger.getLogger(professionalSearchFrame.class.getName()).log(Level.SEVERE, null, SQLError);
+        }
+    }
+    
+    private void SQLProfessionalNameDelete(){
+        int deleteConfirmation = JOptionPane.showConfirmDialog(null, "Are you sure you wish to delete the " + registeredProfessionalName.getName() + " register?", "Delete", JOptionPane.YES_NO_OPTION);
+        if(deleteConfirmation == JOptionPane.YES_OPTION){
+            Connection SQLDeleteConnection;
+            Statement SQLDeleteInstruction;
+            ResultSet SQLDeleteOutputData;
+            
+            try{
+                SQLDeleteConnection = DriverManager.getConnection(databaseConfiguration.connectionCoordinates, databaseConfiguration.databaseUser, databaseConfiguration.databasePassword);
+                SQLDeleteInstruction = SQLDeleteConnection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+                SQLDeleteInstruction.executeUpdate("DELETE registeredProfessionals WHERE professionalID = " + registeredProfessionalName.getID() + "");
+                JOptionPane.showMessageDialog(null, "Professional register deleted successfully!");
+            }catch(SQLException SQLError){
+                JOptionPane.showMessageDialog(null, "Error E-01! An error was identified during the register removal process. Please, re-check the inserted information and try again.");
+                Logger.getLogger(professionalSearchFrame.class.getName()).log(Level.SEVERE, null, SQLError);
+            }
+        }
     }
 }
