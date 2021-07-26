@@ -2,6 +2,7 @@ package systemFrames;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import systemFiles.appNavigator;
 
 public class homeFrame extends JPanel {
     JLabel titleLabel;
@@ -9,6 +10,7 @@ public class homeFrame extends JPanel {
     public homeFrame(){
         enableItems();
         enableEvents();
+        appNavigator.enableMenu();
     }
     
     private void enableItems(){

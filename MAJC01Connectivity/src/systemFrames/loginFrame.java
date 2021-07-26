@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import systemFiles.appNavigator;
 
 public class loginFrame extends JPanel {
 
@@ -55,8 +56,12 @@ public class loginFrame extends JPanel {
     private void createEvents() {
         loginButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent action01) {
-
+            public void actionPerformed(ActionEvent createEventsEvent) {
+                if(userField.getText().equals("admin") && new String(passwordField.getPassword()).equals("admin")){
+                    appNavigator.homeFrame();
+                }else{
+                    JOptionPane.showMessageDialog(null, "Access denied! Please, re-check the login credentials");
+                }
             }
         });
     }

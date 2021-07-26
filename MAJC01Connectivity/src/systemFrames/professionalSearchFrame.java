@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import systemFiles.appNavigator;
 import systemFiles.databaseConfiguration;
 import systemParts.Professional;
 
@@ -83,7 +84,7 @@ public class professionalSearchFrame extends JPanel {
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event01){
-                
+                appNavigator.professionalNameEdit(registeredProfessionalName);
             }
         });
         deleteButton.addActionListener(new ActionListener(){
