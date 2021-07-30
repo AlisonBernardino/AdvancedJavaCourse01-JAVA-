@@ -3,60 +3,67 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 
 public class Manager {
-    String firstName;
-    String lastName;
-    String email;
-    JFormattedTextField bornDate;
-    JComboBox occupation;
-    double salary;
+    int managerID;
+    String managerFirstName;
+    String managerLastName;
+    String managerEmail;
+    JFormattedTextField managerBornDate;
+    JComboBox managerOccupation;
+    double managerSalary;
 
-    public String getFirstName() {
-        return firstName;
+    public int getManagerID() {
+        return managerID;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setManagerID(int managerID) {
+        this.managerID = managerID;
     }
 
-    public String getLastName() {
-        return lastName;
+    public String getManagerFirstName() {
+        return managerFirstName;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setManagerFirstName(String managerFirstName) {
+        this.managerFirstName = managerFirstName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getManagerLastName() {
+        return managerLastName;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setManagerLastName(String managerLastName) {
+        this.managerLastName = managerLastName;
     }
 
-    public JFormattedTextField getBornDate() {
-        return bornDate;
+    public String getManagerEmail() {
+        return managerEmail;
     }
 
-    public void setBornDate(JFormattedTextField bornDate) {
-        this.bornDate = bornDate;
+    public void setManagerEmail(String managerEmail) {
+        this.managerEmail = managerEmail;
     }
 
-    public JComboBox getOccupation() {
-        return occupation;
+    public JFormattedTextField getManagerBornDate() {
+        return managerBornDate;
     }
 
-    public void setOccupation(JComboBox occupation) {
-        this.occupation = occupation;
+    public void setManagerBornDate(JFormattedTextField managerBornDate) {
+        this.managerBornDate = managerBornDate;
     }
 
-    public double getSalary() {
-        return salary;
+    public JComboBox getManagerOccupation() {
+        return managerOccupation;
     }
 
-    public void setSalary(double salary) {
-        this.salary = salary;
+    public void setManagerOccupation(JComboBox managerOccupation) {
+        this.managerOccupation = managerOccupation;
     }
-    
-    
+
+    public double getManagerSalary() {
+        return managerSalary;
+    }
+
+    public void setManagerSalary(double managerSalary) {
+        this.managerSalary = managerSalary;
+    } 
 }

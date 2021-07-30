@@ -27,12 +27,12 @@ import systemParts.Professional;
 
 public class professionalSearchFrame extends JPanel {
 
-    professionalName registeredProfessionalName;
+    Professional registeredProfessional;
     JLabel titleLabel, professionalNameLabel;
     JTextField professionalNameField;
     JButton searchButton, editButton, deleteButton;
-    DefaultListModel<professionalName> professionalNameListModel = new DefaultListModel();
-    JList<professionalName> professionalNameList;
+    DefaultListModel<Professional> professionalListModel = new DefaultListModel();
+    JList<Professional> professionalList;
 
     public professionalSearchFrame() {
         createItems();
@@ -51,22 +51,22 @@ public class professionalSearchFrame extends JPanel {
         editButton.setEnabled(false);
         deleteButton = new JButton("Erase name");
         deleteButton.setEnabled(false);
-        professionalNameListModel = new DefaultListModel();
-        professionalNameList = new JList();
-        professionalNameList.setModel(professionalNameListModel);
-        professionalNameList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_sELECTION);
+        professionalListModel = new DefaultListModel();
+        professionalList = new JList();
+        professionalList.setModel(professionalListModel);
+        professionalList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         titleLabel.setBounds(21, 21, 661, 41);
         professionalNameLabel.setBounds(151, 121, 401, 21);
         professionalNameField.setBounds(151, 141, 401, 41);
         searchButton.setBounds(561, 141, 131, 41);
-        professionalNameList.setBounds(151, 201, 401, 241);
+        professionalList.setBounds(151, 201, 401, 241);
         editButton.setBounds(561, 361, 131, 41);
         deleteButton.setBounds(561, 401, 131, 41);
         add(titleLabel);
         add(professionalNameLabel);
         add(professionalNameField);
-        add(professionalNameList);
+        add(professionalList);
         add(searchButton);
         add(editButton);
         add(deleteButton);
@@ -78,26 +78,26 @@ public class professionalSearchFrame extends JPanel {
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event01) {
-                SQLProfessionalNameSearch(professionalNameField.getText());
+                SQLProfessionalSearch(professionalNameField.getText());
             }
         });
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent event01){
-                appNavigator.professionalNameEdit(registeredProfessionalName);
+                appNavigator.professionalEdit(registeredProfessional);
             }
         });
         deleteButton.addActionListener(new ActionListener(){
            @Override
            public void actionPerformed(ActionEvent event01){
-               SQLDeleteProfessionalName();
+               SQLDeleteProfessional();
            }
         });
-        professionalNameList.addListSelectionListener(new ListSelectionListener(){
+        professionalList.addListSelectionListener(new ListSelectionListener(){
             @Override
             public void changedValue(ListSelectionEvent event01){
-                registeredProfessionalName = professionalNameList.getSelectedValue();
-                if(registeredProfessionalName == null){
+                registeredProfessional = professionalList.getSelectedValue();
+                if(registeredProfessional == null){
                     editButton.setEnabled(false);
                     deleteButton.setEnabled(false);
                 }else{
@@ -108,7 +108,7 @@ public class professionalSearchFrame extends JPanel {
         });
     }
     
-    private void SQLProfessionalNameSearch(String professionalName){
+    private void SQLProfessionalSearch(String professionalName){
         
         Connection searchConnection;
         Statement SQLSearchInstruction;
@@ -119,14 +119,14 @@ public class professionalSearchFrame extends JPanel {
             SQLSearchInstruction = searchConnection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
             SQLSearchOutputData = SQLSearchInstruction.executeQuery("SELECT * FROM registeredProfessionals WHERE professionalFirstName like " + professionalName + "%'");
             
-            professionalNameListModel.clear();
+            professionalListModel.clear();
             
             while(SQLSearchOutputData.next()){
-                professionalName newProfessionalName = new professionalName();
-                newProfessionalName.setID(SQLSearchOutputData.getInt("professionalID"));
-                newProfessionalName.setProfessionalName(SQLSearchOutputData.getString("professionalName"));
+                Professional newProfessional = new Professional();
+                newProfessional.setProfessionalID(SQLSearchOutputData.getInt("professionalID"));
+                newProfessional.setProfessionalName(SQLSearchOutputData.getString("professionalName"));
                 
-                professionalNameListModel.addElement(professionalName);
+                professionalListModel.addElement(newProfessional);
             }
         }catch(SQLException SQLError){
             JOptionPane.showMessageDialog(null, "Error D-01! There was a problem during names search. Please, review the inserted information");
@@ -134,8 +134,8 @@ public class professionalSearchFrame extends JPanel {
         }
     }
     
-    private void SQLProfessionalNameDelete(){
-        int deleteConfirmation = JOptionPane.showConfirmDialog(null, "Are you sure you wish to delete the " + registeredProfessionalName.getName() + " register?", "Delete", JOptionPane.YES_NO_OPTION);
+    private void SQLProfessionalDelete(){
+        int deleteConfirmation = JOptionPane.showConfirmDialog(null, "Are you sure you wish to delete the " + registeredProfessional.getName() + " register?", "Delete", JOptionPane.YES_NO_OPTION);
         if(deleteConfirmation == JOptionPane.YES_OPTION){
             Connection SQLDeleteConnection;
             Statement SQLDeleteInstruction;
@@ -144,7 +144,7 @@ public class professionalSearchFrame extends JPanel {
             try{
                 SQLDeleteConnection = DriverManager.getConnection(databaseConfiguration.connectionCoordinates, databaseConfiguration.databaseUser, databaseConfiguration.databasePassword);
                 SQLDeleteInstruction = SQLDeleteConnection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
-                SQLDeleteInstruction.executeUpdate("DELETE registeredProfessionals WHERE professionalID = " + registeredProfessionalName.getID() + "");
+                SQLDeleteInstruction.executeUpdate("DELETE registeredProfessionals WHERE professionalID = " + registeredProfessional.getID() + "");
                 JOptionPane.showMessageDialog(null, "Professional register deleted successfully!");
             }catch(SQLException SQLError){
                 JOptionPane.showMessageDialog(null, "Error E-01! An error was identified during the register removal process. Please, re-check the inserted information and try again.");

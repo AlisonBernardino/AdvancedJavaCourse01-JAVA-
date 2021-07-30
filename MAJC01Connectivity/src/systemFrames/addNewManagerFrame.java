@@ -26,6 +26,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.MaskFormatter;
 import systemFiles.databaseConfiguration;
+import systemFiles.appNavigator;
+import systemParts.Occupation;
 import systemParts.Manager;
 
 public class addNewManagerFrame extends JPanel{
@@ -171,6 +173,30 @@ public class addNewManagerFrame extends JPanel{
         
         if(!isEmailValid){
             JOptionPane.showMessageDialog(null, "Error B-01! Invalid email. Please, re-insert this information to proceed.");
+        }
+        
+        Connection newManagerConnection;
+        PreparedStatement newManagerSQLInstruction;
+        try{
+            newManagerConnection = DriverManager.getConnection(databaseConfiguration.connectionCoordinates, databaseConfiguration.databaseUser, databaseConfiguration.databasePassword);
+            String newManagerTemplate = "INSERT INTO registeredManagers (managerFirstName, managerLastName, managerEmail, managerBornDate, managerOccupation, managerSalary)";
+            newManagerTemplate += " VALUES (?,?,?,?,?,?)";
+            newManagerSLInstruction = newManagerConnection.prepareStatement(newManagerTemplate);
+            newManagerSQLInstruction.setString(1, newManager.getFirstName());
+            newManagerSQLInstruction.setString(2, newManager.getLastName());
+            newManagerSQLInstruction.setString(3, newManager.getEmail());
+            if(newManager.getOccupation() > 0){
+                newManagerSQLInstruction.setInt(4, newManager.getOccupation());
+            }else{
+                newManagerSQLInstruction.setNull(5, java.sql.Types.INTEGER);
+            }
+            newManagerSQLInstruction.setString(6, Double.toString(newManager.getSalario()));
+            newManagerSQLInstruction.executeUpdate();
+            JOptionPane.showMessageDialog(null, "New manager added successfully!");
+            appNavigator.homeFrame();
+        }catch(SQLException newManagerSQLException){
+            JOptionPane.showMessageDialog(null, "Error D-01! There was an error during the manager insertion. Please, re-check the informations and try again. (newManagerSQLException)");
+            Logger.getLogger(addNewManagerFrame.class.getName()).log(Level.SEVERE, null, newManagerSQLException);
         }
     }
 }
