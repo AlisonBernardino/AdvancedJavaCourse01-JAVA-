@@ -51,7 +51,49 @@ public class OccupationsRelatory extends JPanel{
         
         ChartPanel graphicsChartPanel = new ChartPanel(graphicsChart){
             @Override
-            public 
+            public Dimension getPreferredSize(){
+                return new Dimension(661,341);
+            }
         };
+        
+        titleLabel.setBounds(21,21,661,41);
+        descriptionLabel.setBounds(21,51,661,41);
+        graphicsChartPanel.setBounds(21,101,661,341);
+        
+        add(titleLabel);
+        add(descriptionLabel);
+        add(graphicsChartPanel);
+        setVisible(true);
+    }
+    
+    private void createRelatoryEvents(){
+        
+    }
+    
+    private DefaultPieDataset createGraphicsData(){
+        DefaultPieDataset graphicInfo = new DefaultPieDataset();
+        
+        Connection graphicsInfoSQLConnection;
+        Statement graphicsInfoSQLInstruction;
+        ResultSet graphicsInfoSQLOutput;
+        
+        try{
+            graphicsInfoSQLConnection = DriverManager.getConnection(databaseConfiguration.connectionCoordinates, databaseConfiguration.databaseUser, databaseConfiguration.databasePassword);
+            graphicsInfoSQLInstruction = graphicsInfoSQLConnection.createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY);
+            String graphicsInfoQuery = "SELECT availableOccupations.occupationName, count(*) as occupationQuantity FROM avalabelOccupations, availableManagers";
+            graphicsInfoQuery += "WHERE avaiableOccupations.occupationID = availableManagers.managerOccupation group by availableOccupations.occupationName order by occupationName asc";
+            graphicsInfoSQLOutput = graphicsInfoSQLInstruction.executeQuery(graphicsInfoQuery);
+            
+            while(graphicsInfoSQLOutput.next()){
+                graphicInfo.setValue(graphicsInfoSQLOutput.getString("Specific name: "), graphicsInfoSQLOutput.getInt("Specific quantity:"));
+            }
+            
+            return graphicInfo;
+        }catch(SQLException graphicInfoException){
+            JOptionPane.showMessageDialog(null, "Error F-01! We found an unstable situation during the relatory creation. Please, re-insert the information and try again (GraphicsInfoException)" + graphicInfoException.getMessage());
+            appNavigator.homeFrame();
+        }
+        
+        return null;
     }
 }
