@@ -3,13 +3,19 @@ import java.util.Arrays;
 
 public class binarySearchVector {
     public static void main(String[] args){
-        int numbersVector[] = {5,10,4,7,5,8,1};
-        // "For each" loop implementation
-        for(int orderedVector:numbersVector){
-            System.out.println(orderedVector + " ");
+        int numbersVector[] = {1,6,9,4,5,7,3,2,8};
+        for(int organizedVector:numbersVector){
+            System.out.print(organizedVector + " ");
         }
         System.out.println("");
-        int arrayIndex = Arrays.binarySearch(numbersVector, 1);
-        System.out.println("Searched value index = " + arrayIndex);
+        int searchedArray = Arrays.binarySearch(numbersVector, 3);
+        System.out.println("Searched value index = " + searchedArray);
+        
+        // Arrays.fill use
+        float valuesVector[] = new float[25];
+        Arrays.fill(valuesVector, 4.5f);
+        for(float fillingValue:valuesVector){
+            System.out.println(fillingValue + " ");
+        }        
     }
 }
